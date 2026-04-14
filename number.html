@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Link Manager</title>
+    <style>
+        /* Dark and Green theme */
+        body { font-family: 'Segoe UI', sans-serif; background: #121212; color: white; padding: 20px; }
+        
+        h2 { color: #2ecc71; text-align: center; border-bottom: 1px solid #333; padding-bottom: 10px; }
+
+        .image-card { 
+            display: flex; 
+            flex-direction: column; /* Stack image and button vertically for better viewing */
+            align-items: center; 
+            background: #1e1e1e; 
+            margin-bottom: 20px; 
+            padding: 15px; 
+            border-radius: 12px; 
+            border: 1px solid #333;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            transition: 0.3s;
+        }
+
+        .image-card:hover { border-color: #2ecc71; }
+
+        .thumb { 
+            /* Yahan se width aur height hata di gayi hai */
+            max-width: 100%; /* Taaki mobile screen se bahar na jaye */
+            height: auto; 
+            border-radius: 8px; 
+            margin-bottom: 15px; 
+            background: #252525;
+            display: block;
+        }
+
+        .info { text-align: center; width: 100%; }
+
+        .file-name { font-weight: bold; font-size: 16px; margin-bottom: 10px; color: #2ecc71; }
+
+        .copy-btn { 
+            background: linear-gradient(180deg, #2ecc71, #27ae60); 
+            color: white; 
+            border: none; 
+            padding: 10px 25px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-weight: bold;
+            font-size: 14px;
+            transition: 0.2s;
+            width: 100%;
+        }
+
+        .copy-btn:active { transform: scale(0.95); }
+    </style>
+</head>
+<body>
+
+    <h2>GitHub Image Manager</h2>
+    <div id="imageList"></div>
+
+    <script>
+        const container = document.getElementById('imageList');
+        
+        // Dynamic URL logic
+        const currentPath = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
+
+        // Loop for images
+        for (let i = 0; i <= 9; i++) {
+            const imgName = `image${i}.png`;
+            const fullUrl = currentPath + imgName;
+            
+            const card = document.createElement('div');
+            card.className = 'image-card';
+            
+            card.innerHTML = `
+                <img src="${imgName}" class="thumb" alt="${imgName}" onerror="this.src='https://via.placeholder.com/150?text=Not+Found'">
+                <div class="info">
+                    <div class="file-name">${imgName}</div>
+                    <button class="copy-btn" onclick="copyToClipboard('${fullUrl}')">Copy Link</button>
+                </div>
+            `;
+            container.appendChild(card);
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Link Copy Ho Gaya!\n" + text);
+            }).catch(err => {
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert("Link Copy Ho Gaya!\n" + text);
+            });
+        }
+    </script>
+
+</body>
+</html>
